@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# bq-helper
+src/bq-helper/*
+
 # Distribution / packaging
 .Python
 build/
