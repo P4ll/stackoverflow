@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # bq-helper
-/src/bq-helper/*
+src/bq-helper/*
 
 # Distribution / packaging
 .Python
