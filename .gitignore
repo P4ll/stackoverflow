@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# CSV ext
+*.csv
+
 # bq-helper
 src/bq-helper/*
 
