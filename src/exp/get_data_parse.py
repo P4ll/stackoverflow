@@ -2,9 +2,11 @@ import pandas as pd
 import numpy as np
 
 import urllib.request
+from urllib.error import HTTPError
 from lxml import html, etree
 
 import os
+from os import path
 from progress.bar import Bar
 
 import sys
@@ -30,17 +32,47 @@ def get_user_reached(df: pd.DataFrame) -> pd.DataFrame:
 
     i = 0
     bar = MyBar('Progress', max=len(df.index))
+    prev_i = 0
+    if path.isfile('save.csv'):
+        ss = pd.read_csv('save.csv')
+        prev_i = len(ss.index)
+        for j in range(prev_i):
+            reached_arr[j] = ss.iloc[j]['user_reached_people']
+            ans_arr[j] = ss.iloc[j]['user_ans_count']
+            quest_arr[j] = ss.iloc[j]['user_questions_count']
     for user_id in df['id_user']:
-        try:
-            resp = urllib.request.urlopen(f'https://stackoverflow.com/users/{int(user_id)}')
-            # resp = urllib.request.urlopen(f'https://stackoverflow.com/users/142124')
-            readed = resp.read()
+        if i < prev_i:
+            i += 1
+            continue
 
-            if str(readed).find("Too many requests") != -1:
-                print("BANNED, W8 for STACK")
-                time.sleep(5 * 61)
+        if i % 200 == 0 and i != 0:
+            new_df = pd.DataFrame()
+            new_df['id_user'] = df['id_user'][:i - 1]
+            new_df['user_reached_people'] = reached_arr[:i - 1]
+            new_df['user_ans_count'] = ans_arr[:i - 1]
+            new_df['user_questions_count'] = quest_arr[:i - 1]
+            new_df.to_csv('save.csv', index=False)
+            print('DATA SAVED')
+
+        try:
+            try:
                 resp = urllib.request.urlopen(f'https://stackoverflow.com/users/{int(user_id)}')
-                readed = resp.read()
+            except HTTPError:
+                if str(sys.exc_info()[1]) != "HTTP Error 404: Not Found":
+                    new_df = pd.DataFrame()
+                    new_df['id_user'] = df['id_user'][:i - 1]
+                    new_df['user_reached_people'] = reached_arr[:i - 1]
+                    new_df['user_ans_count'] = ans_arr[:i - 1]
+                    new_df['user_questions_count'] = quest_arr[:i - 1]
+                    new_df.to_csv('save.csv', index=False)
+
+                    print("\nBANNED, W8 for STACK")
+                    time.sleep(5 * 61)
+                    resp = urllib.request.urlopen(f'https://stackoverflow.com/users/{int(user_id)}')
+                else:
+                    raise Exception("Page not found")
+
+            readed = resp.read()
 
             tree = html.fromstring(readed)
 
@@ -72,8 +104,10 @@ def get_user_reached(df: pd.DataFrame) -> pd.DataFrame:
         bar.add_info = state_str
         bar.next()
         i += 1
+        time.sleep(0.3)
 
     new_df = pd.DataFrame()
+    new_df['id_user'] = df['id_user']
     new_df['user_reached_people'] = reached_arr
     new_df['user_ans_count'] = ans_arr
     new_df['user_questions_count'] = quest_arr
@@ -97,5 +131,5 @@ def get_all_data(init_data: pd.DataFrame) -> pd.DataFrame:
     return df
 
 if __name__ == "__main__":
-    df = get_all_data(pd.read_csv('temp.csv'))
+    df = get_all_data(pd.read_csv('users.csv'))
     df.to_csv('dataset/data.csv')
