@@ -119,7 +119,7 @@ def get_user_reached(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 def get_post_is_closed(df: pd.DataFrame) -> pd.DataFrame:
-    arr = np.array(len(df.index), dtype=np.int8)
+    arr = np.zeros(len(df.index), dtype=np.int8)
     i = 0
     bar = MyBar('post is closed', max=len(df.index))
     for title in df['post_title']:
@@ -133,13 +133,13 @@ def get_post_is_closed(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 def get_post_type(df: pd.DataFrame) -> pd.DataFrame:
-    arr = np.array(len(df.index), dtype=np.int8)
+    arr = np.zeros(len(df.index), dtype=np.int8)
     bar = MyBar('Post typing', max=len(df.index))
     for i in range(len(df.index)):
         bar.next()
-        sc = int(df.iloc[i]['post_score'])
-        ans_count = int(df.iloc[i]['post_ans_count'])
-        is_closed = int(df.iloc[i]['post_is_closed'])
+        sc = int(df.loc[i, 'post_score'])
+        ans_count = int(df.loc[i, 'post_ans_count'])
+        is_closed = int(df.loc[i, 'post_is_closed'])
         if (sc > 0 or ans_count > 0 and sc == 0 and not is_closed):
             arr[i] = 1
     df['type'] = arr
@@ -185,14 +185,13 @@ def test():
     print(resp.head(10))
 
 if __name__ == "__main__":
-    # df = get_all_data()
-    # df.to_csv('test.csv', index=False, dtype=dtypes)
-    # df = pd.read_csv('test.csv', dtype=dtypes)
-    # df.dtypes = dtypes
-    # df = pd.read_csv('test.csv')
-    # print(df.head(5))
-    df = get_all_data(pd.read_csv('temp.csv'))
-    os.remove('temp.csv')
-    df.to_csv('dataset/data.csv')
+    # df = get_all_data(pd.read_csv('temp.csv'))
+    # os.remove('temp.csv')
+    # df.to_csv('dataset/data.csv')
 
-    # df.to_csv('dataset/dataset.csv', index=False)
+    df = pd.read_csv('temp.csv')
+    # df = get_post_is_closed(df)
+    # df.to_csv('temp.csv', index=False)
+    df = get_post_type(df)
+
+    df.to_csv('dataset/data.csv', index=False)

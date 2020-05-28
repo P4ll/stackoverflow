@@ -1,9 +1,21 @@
 import pandas as pd
 import numpy as np
+import math
 
-df = pd.DataFrame()
-df['test'] = [1, 2, 3, 4, 5]
-df['ttt'] = [31, 1, 1, 1, 1]
-df.loc[5] = [12, 12]
-df.loc[6] = [12, 12]
+users_data_types = {
+    'id_user': 'int64',
+    'user_questions_count': 'int64',
+    'user_ans_count': 'int64',
+    'user_reached_people': 'int64'
+}
+# df = pd.read_csv('save.csv')
+# print(df.loc[2, 'id_user'])
+# tt = dict()
+
+# for i in range(len(df.index)):
+#     tt[df.iloc[i, 0]] = (df.iloc[i, 1], df.iloc[i, 2], df.iloc[i, 3])
+
+# print(tt)
+
+df = pd.read_csv('dataset/data.csv')
 print(df.head(10))

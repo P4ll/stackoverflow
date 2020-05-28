@@ -196,5 +196,33 @@ def get_users_table():
     user_df['id_user'] = list(a)
     user_df.to_csv('id_user.csv', index=False)
 
+def insert_user_data(main_data: pd.DataFrame, user_data: pd.DataFrame):
+    max_len = len(main_data.index)
+    bar = MyBar('Inserting...', max=max_len)
+    # 'user_questions_count', 'user_ans_count', 'user_reached_people'
+    main_data['user_questions_count'] = [-1 for i in range(max_len)]
+    main_data['user_ans_count'] = [-1 for i in range(max_len)]
+    main_data['user_reached_people'] = [-1 for i in range(max_len)]
+
+    user_dict = dict()
+    for i in range(len(user_data.index)):
+        user_dict[user_data.iloc[i, 0]] = (user_data.iloc[i, 1], user_data.iloc[i, 2], user_data.iloc[i, 3])
+
+    for i in range(max_len):
+        if not math.isnan(main_data.loc[i, 'id_user']):
+            u_id = int(round(main_data.loc[i, 'id_user']))
+
+            if u_id in user_dict:
+                q, a, r = user_dict[u_id]
+                main_data.loc[i, 'user_questions_count'] = q
+                main_data.loc[i, 'user_ans_count'] = a
+                main_data.loc[i, 'user_reached_people'] = r
+
+        bar.next()
+    bar.finish()
+
+    main_data.to_csv('temp.csv', index=False)
+
 if __name__ == "__main__":
-    df = save_add_user_info(pd.read_csv('id_user.csv'))
+    # df = save_add_user_info(pd.read_csv('id_user.csv'))
+    insert_user_data(pd.read_csv('temp.csv'), pd.read_csv('save.csv'))
