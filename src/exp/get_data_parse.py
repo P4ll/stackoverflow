@@ -1,3 +1,7 @@
+import sys
+import time
+import math
+
 import pandas as pd
 import numpy as np
 
@@ -9,8 +13,10 @@ import os
 from os import path
 from progress.bar import Bar
 
-import sys
-import time
+sys.path.append('scr/exp')
+from TorCrowler import TorCrawler
+from fake_useragent import UserAgent
+from bs4 import BeautifulSoup
 
 class MyBar(Bar):
     message = 'Loading'
@@ -117,19 +123,78 @@ def get_user_reached(df: pd.DataFrame) -> pd.DataFrame:
     bar.finish()
     return df
 
+users_data_types = {
+    'id_user': 'int64',
+    'user_questions_count': 'int64',
+    'user_ans_count': 'int64',
+    'user_reached_people': 'int64'
+}
 
-def get_all_data(init_data: pd.DataFrame) -> pd.DataFrame:
-    df = init_data
+def save_add_user_info(df: pd.DataFrame) -> None:
+    out_df = pd.DataFrame(columns=['id_user', 'user_questions_count', 'user_ans_count', 'user_reached_people'])
 
-    print('init data loaded')
+    i = 0
+    if path.isfile('save.csv'):
+        out_df = pd.read_csv('save.csv')
+        i = len(out_df.index)
+    
+    crawler = TorCrawler(ctrl_pass='mypassword')
+    bar = MyBar('Progress', max=len(df.index))
+    bar.index = i
+    user_count = len(df.index)
+    fail_count = 0
+    while i < user_count:
+        u_id = int(df.loc[i]['id_user'])
 
-    df = get_user_reached(df)
-    sys.exit()
-    df.to_csv('temp.csv', index=False)
-    print('Reached people calculated')
+        if i != 0 and i % 200 == 0:
+            out_df.to_csv('save.csv', index=False)
 
-    return df
+        try:
+            response = crawler.get(f"https://stackoverflow.com/users/{u_id}", headers={'User-Agent': UserAgent().chrome})
+            tree = html.fromstring(str(response))
+
+            reached = tree.xpath('//*[@id="user-card"]/div/div[2]/div/div[2]/div[1]/div/div[3]/div/div[1]')[0].text
+            reached = reached.strip('~')
+            reached_n = float(reached.strip('km'))
+            if reached[-1] == 'k':
+                reached_n *= 1000
+            elif reached[-1] == 'm':
+                reached_n *= 1000000
+            
+            ans = tree.xpath('//*[@id="user-card"]/div/div[2]/div/div[2]/div[1]/div/div[1]/div/div[1]')[0].text
+            ans = ans.replace(',', '')
+            ans_n = int(ans)
+
+            quest = tree.xpath('//*[@id="user-card"]/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div[1]')[0].text
+            quest = quest.replace(',', '')
+            quest_n = int(quest)
+
+            out_df.loc[i] = [u_id, quest_n, ans_n, reached_n]
+        except Exception:
+            if str(sys.exc_info()[1]) != "HTTP Error 404: Not Found" and fail_count < 2 and str(sys.exc_info()[1]) != "list index out of range":
+                print(f"SLEEP ON 60 id: {u_id}, message: {str(sys.exc_info()[1])}")
+                time.sleep(60)
+                crawler.rotate()
+                fail_count += 1
+                continue
+            out_df.loc[i] = [u_id, -1, -1, -1]
+
+        bar.next()
+        i += 1
+        fail_count = 0
+
+    out_df.to_csv('dataset/users_data.csv', index=False)
+    bar.finish()
+
+def get_users_table():
+    df = pd.read_csv('temp.csv')
+    a = set()
+    for u_id in df['id_user']:
+        if (not math.isnan(u_id)):
+            a.add(int(u_id))
+    user_df = pd.DataFrame()
+    user_df['id_user'] = list(a)
+    user_df.to_csv('id_user.csv', index=False)
 
 if __name__ == "__main__":
-    df = get_all_data(pd.read_csv('users.csv'))
-    df.to_csv('dataset/data.csv')
+    df = save_add_user_info(pd.read_csv('id_user.csv'))
