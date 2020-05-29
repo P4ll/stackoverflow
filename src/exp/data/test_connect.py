@@ -24,6 +24,6 @@ from data_miner import DataMiner
 
 dd = DataMiner()
 
-oo = dd.get_data(df.head(3))
+oo = dd.get_data(df.head(10))
 
-print(oo.head(3))
+print(oo.head(10))
