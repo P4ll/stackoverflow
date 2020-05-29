@@ -224,5 +224,5 @@ def insert_user_data(main_data: pd.DataFrame, user_data: pd.DataFrame):
     main_data.to_csv('temp.csv', index=False)
 
 if __name__ == "__main__":
-    # df = save_add_user_info(pd.read_csv('id_user.csv'))
-    insert_user_data(pd.read_csv('temp.csv'), pd.read_csv('save.csv'))
+    df = save_add_user_info(pd.read_csv('id_user.csv'))
+    # insert_user_data(pd.read_csv('temp.csv'), pd.read_csv('save.csv'))

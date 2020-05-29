@@ -18,4 +18,12 @@ users_data_types = {
 # print(tt)
 
 df = pd.read_csv('dataset/data.csv')
-print(df.head(10))
+import sys
+sys.path.append('src/')
+from data_miner import DataMiner
+
+dd = DataMiner()
+
+oo = dd.get_data(df.head(3))
+
+print(oo.head(3))
