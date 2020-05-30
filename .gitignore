@@ -147,5 +147,8 @@ cython_debug/
 .vscode/*
 
 # DataSet
-/dataset/*
-!/dataset/.gitkeep
+dataset/xml/*
+!/dataset/xml/.gitkeep
+# /dataset/*
+# !/dataset/.gitkeep
+# !/dataset/tmp/.gitkeep
