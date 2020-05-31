@@ -11,7 +11,7 @@ from lxml import html, etree
 
 import os
 from os import path
-sys.path.append('src/libs')
+sys.path.append('src')
 
 from libs.my_progress_bar import MyBar
 from libs.TorCrowler import TorCrawler

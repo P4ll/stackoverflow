@@ -1,30 +1,32 @@
-import sys
-import os
+import bq_helper
+from bq_helper import BigQueryHelper
+stackOverflow = bq_helper.BigQueryHelper(active_project="bigquery-public-data",
+                                   dataset_name="stackoverflow")
 import pandas as pd
 import numpy as np
+
+import urllib.request
+from lxml import html, etree
+
+import os
+import sys
 import math
-
 sys.path.append('src')
+from libs.my_progress_bar import MyBar
+import libs.my_paths as mp
 
-from libs.my_paths import base_final_file, base_optimal_data
+def get_init_data() -> pd.DataFrame:
+    post_q = """SELECT
+        id AS id_post,
+        tags AS post_tags,
+        title AS post_title,
+        body AS post_body,
+    FROM   `bigquery-public-data.stackoverflow.posts_questions`
+    WHERE EXTRACT(YEAR FROM creation_date) BETWEEN 2018 AND 2019
+    """
+    resp = stackOverflow.query_to_pandas(post_q)
+    return resp
 
-df = pd.read_csv(base_final_file)
-
-new_df = pd.DataFrame(columns=df.columns)
-
-print(df.columns)
-
-max_len = len(df.index)
-cur_len = 0
-
-for row in range(max_len):
-    if not math.isnan(df.loc[row, 'id_user']) and not math.isnan(df.loc[row, 'user_rating']) and df.loc[row, 'user_ans_count'] != -1:
-        new_df.loc[cur_len] = df.loc[row]
-        new_df.loc[cur_len, 'id_user'] = int(round(new_df.loc[cur_len, 'id_user']))
-        new_df.loc[cur_len, 'user_rating'] = int(round(new_df.loc[cur_len, 'user_rating']))
-        cur_len += 1
-
-new_df.id_user = new_df.id_user.astype('int64')
-new_df.user_rating = new_df.user_rating.astype('int64')
-
-new_df.to_csv(base_optimal_data, index=False)
+if __name__ == "__main__":
+    df = get_init_data()
+    df.to_csv('dataset/large_data.csv', index=False)

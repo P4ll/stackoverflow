@@ -1,17 +1,10 @@
-import urllib.request
-import requests
-from lxml import html, etree
+import pandas as pd
+import numpy as np
 
-response = urllib.request.urlopen('https://stackoverflow.com/users/43458')
-tree = html.fromstring(response.read())
-# print(etree.tostring(tree.xpath('//*[@id="user-card"]/div/div[2]/div/div[2]/div[1]/div/div[3]/div/div[1]')[0].text))
-# print(tree.xpath('//*[@id="user-card"]/div/div[2]/div/div[2]/div[1]/div/div[3]/div/div[1]')[0].text)
-a = tree.xpath('//*[@id="user-card"]/div/div[2]/div/div[2]/div[1]/div/div[3]/div/div[1]')[0].text
-a = a.strip('~')
-n = float(a.strip('km'))
-if a[-1] == 'k':
-    n *= 1000
-elif a[-1] == 'm':
-    n *= 1000000
-print(n)
-b = 1
+a = [1, 2, 3]
+b = [4, 5, 7]
+
+zz = pd.DataFrame()
+zz['a'] = a
+zz['b'] = b
+print(zz[:2])

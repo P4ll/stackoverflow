@@ -11,7 +11,7 @@ from lxml import html, etree
 import os
 import sys
 import math
-sys.path.append('src/libs')
+sys.path.append('src')
 from libs.my_progress_bar import MyBar
 import libs.my_paths as mp
 
