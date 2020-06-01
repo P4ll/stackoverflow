@@ -156,3 +156,6 @@ dataset/xml/*
 # Models data
 models_data/*
 !/models_data/.gitkeep
+
+# Serialized files
+*.ser

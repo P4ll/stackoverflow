@@ -51,7 +51,7 @@ def calc_series(ser, name):
     return ser
 
 def calc_docs(docs):
-    i = 0
+    i = 1
     for doc in docs:
         df = pd.read_csv(doc)
         print('begin maping of proc_docs')
@@ -60,6 +60,7 @@ def calc_docs(docs):
         proc_head  = df['post_title'].map(preprocess)
         df = None
         proc_docs = proc_docs.append(proc_head, ignore_index=True)
-        proc_docs.to_pickle(f"test{i}.ser")
+        proc_docs.to_pickle(f"proc_docs{i}.ser")
+        print(proc_docs)
 
 calc_docs([base_data + 'large_data1.csv'])
