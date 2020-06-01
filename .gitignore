@@ -152,3 +152,7 @@ dataset/xml/*
 # /dataset/*
 # !/dataset/.gitkeep
 # !/dataset/tmp/.gitkeep
+
+# Models data
+models_data/*
+!/models_data/.gitkeep
