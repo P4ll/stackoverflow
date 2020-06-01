@@ -39,7 +39,7 @@ print(dictionary)
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 print('begin train lda')
-lda_model_tfidf = gensim.models.LdaModel(corpus_tfidf, num_topics=200, id2word=dictionary, passes=2, workers=2)
+lda_model_tfidf = gensim.models.LdaModel(corpus_tfidf, num_topics=200, id2word=dictionary, passes=2) # LdaMulticore with workers=2
 
 
 for idx, topic in lda_model_tfidf.print_topics(5):
