@@ -1,4 +1,5 @@
 # dataset paths
+base_data = 'dataset/'
 base_file_name = 'dataset/tmp/init_tmp.csv'
 base_users_id_file = 'dataset/tmp/users_id.csv'
 base_user_info_file = 'dataset/tmp/user_info.csv'
