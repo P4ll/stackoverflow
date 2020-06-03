@@ -1,1 +1,3 @@
-# Diploma work repos
+# Проект по улучшению качества задаваемых вопросов в системе StackOverflow
+
+![Начальная диаграмма классов](asserts/class_dia.png)
