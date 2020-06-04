@@ -3,6 +3,7 @@ import re
 import pandas as pd
 import math
 import sys
+import json
 sys.path.append('src')
 
 from libs.my_progress_bar import MyBar
@@ -25,11 +26,7 @@ class PlagiatClient:
         bar.finish()
 
     def fill_from_row(self, row: pd.Series) -> None:
-        u_id = -1
-        if not math.isnan(row['id_user']):
-            u_id = round(row['id_user'])
-
-        self.add_doc(str(u_id), row['post_title'],
+        self.add_doc(str(row['id_post']), row['post_title'],
                      row['post_tags'], row['post_body'])
 
     def add_doc(self, user: str, title: str, decr: str, content: str) -> None:
@@ -43,13 +40,18 @@ class PlagiatClient:
         }
         r = requests.post(ADD_URL, json=data)
 
-    def text_test(self, text: str) -> float:
+    def text_test(self, text: str, post_id: int) -> float:
         data = {
             "text": text
         }
 
         r = requests.post(DETECT_URL, json=data)
-        return 1
+        json_data = json.loads(r.text)
+        ans = 0.0
+        if json_data['success']:
+            if int(json_data['data']['doc']['author']) != post_id:
+                ans = json_data['data']['similarity_score']
+        return ans
 
     def del_code(self, text: str) -> str:
         text = re.sub('<code>(.|\n)*?<\/code>', '', text)
@@ -69,6 +71,6 @@ class PlagiatClient:
 
 
 if __name__ == "__main__":
-    df = pd.read_csv('dataset/mdata.csv')
+    df = pd.read_csv('dataset/optimal_data.csv')
     client = PlagiatClient()
     client.fill_from_df(df)

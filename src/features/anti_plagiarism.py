@@ -10,7 +10,7 @@ class AntiPlagiarism(Feature):
         self._client = PlagiatClient()
 
     def get_metric(self, data_row: pd.Series) -> float:
-        return self._client.text_test(data_row['post_body'])
+        return self._client.text_test(data_row['post_body'], data_row['id_post'])
 
     def name(self):
         return self.name
