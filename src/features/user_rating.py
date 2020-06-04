@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from feature import Feature
 
+
 class UserRating(Feature):
     def __init__(self):
         self.name = "user_rating"

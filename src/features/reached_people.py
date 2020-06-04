@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from feature import Feature
 
+
 class ReachedPeople(Feature):
     def __init__(self):
         self.name = "reached_people"

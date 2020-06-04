@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from feature import Feature
 
+
 class QuestionsCount(Feature):
     def __init__(self):
         self.name = "questions_count"
