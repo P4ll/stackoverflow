@@ -5,6 +5,10 @@ from features.plagiarism_client import PlagiatClient
 
 
 class AntiPlagiarism(Feature):
+    """
+    NOTE
+    This implementation don't work because the PlagitClient is very slow (plagiat server bottleneck)
+    """
     def __init__(self):
         self.name = "plagiarism"
         self._client = PlagiatClient()
