@@ -16,8 +16,7 @@ from features.user_rating import UserRating
 class DataMiner:
     def __init__(self):
         self.features = list()
-        z = MissTegFeature()
-        self.features.append(MissTegFeature())
+
         self.features.append(AnsCount())
         self.features.append(QuestionsCount())
         self.features.append(ReachedPeople())
