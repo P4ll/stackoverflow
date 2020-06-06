@@ -22,3 +22,6 @@ class Model:
 
     def get_res(self):
         pass
+
+if __name__ == "__main__":
+    pass

@@ -12,6 +12,7 @@ from features.ans_count import AnsCount
 from features.questions_count import QuestionsCount
 from features.reached_people import ReachedPeople
 from features.user_rating import UserRating
+from features.debug_information import UnnecessaryInformation
 
 class DataMiner:
     def __init__(self):
@@ -21,6 +22,7 @@ class DataMiner:
         self.features.append(QuestionsCount())
         self.features.append(ReachedPeople())
         self.features.append(UserRating())
+        self.features.append(UnnecessaryInformation())
 
     def get_data(self, inp_data: pd.DataFrame) -> pd.DataFrame:
         rows_count = len(inp_data.index)
@@ -28,6 +30,9 @@ class DataMiner:
         names.insert(0, 'id_post')
         names.insert(1, 'id_user')
         out_data = pd.DataFrame(columns=names)
+
+        dbg_inf_model = filter(lambda x: x.name == "debug_inf", self.features)
+        dbg_inf_model.train(inp_data)
 
         for row in range(rows_count):
             for fea in self.features:
