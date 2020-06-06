@@ -26,7 +26,7 @@ stemmer = SnowballStemmer('english')
 
 # logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 base_path = "D:/work/stackoverflow"
-base_model = base_path + "/models/"
+base_model = base_path + "/models_data/"
 base_dataset = base_path + "/dataset/"
 
 processed_docs = pd.Series()
