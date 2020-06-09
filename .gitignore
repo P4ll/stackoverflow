@@ -154,9 +154,11 @@ dataset/xml/*
 # !/dataset/tmp/.gitkeep
 
 # Models data
-models_data/*
-!/models_data/.gitkeep
+/models_data/lda/*
 !/models_data/lda/.gitkeep
+
+/models_data/ngrams/*
+!/models_data/ngrams/.gitkeep
 
 # Serialized files
 *.ser

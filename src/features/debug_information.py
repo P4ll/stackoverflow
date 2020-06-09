@@ -29,14 +29,13 @@ class UnnecessaryInformation:
 
         if code_data != None:
             code_data = code_data.group(0)
+        else:
+            code_data = ''
 
         if(len(code_data) < self._right_border):
             return 0
         else:
             return 1
-
-    def get_metric(self, inputText, data: pd.DataFrame) -> float:
-        pass
 
     def name(self):
         return self.name

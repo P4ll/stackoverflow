@@ -13,6 +13,10 @@ from features.questions_count import QuestionsCount
 from features.reached_people import ReachedPeople
 from features.user_rating import UserRating
 from features.debug_information import UnnecessaryInformation
+from features.title_body_overlap import TitleBodyOverlap
+
+from libs.my_paths import base_optimal_data
+from libs.my_progress_bar import MyBar
 
 class DataMiner:
     def __init__(self):
@@ -23,6 +27,7 @@ class DataMiner:
         self.features.append(ReachedPeople())
         self.features.append(UserRating())
         self.features.append(UnnecessaryInformation())
+        self.features.append(TitleBodyOverlap())
 
     def get_data(self, inp_data: pd.DataFrame) -> pd.DataFrame:
         rows_count = len(inp_data.index)
@@ -31,16 +36,31 @@ class DataMiner:
         names.insert(1, 'id_user')
         out_data = pd.DataFrame(columns=names)
 
-        dbg_inf_model = filter(lambda x: x.name == "debug_inf", self.features)
+        dbg_inf_model = list(filter(lambda x: x.name == "debug_inf", self.features))[0]
         dbg_inf_model.train(inp_data)
 
+        bar = MyBar('Data handling.. ', max=rows_count)
+        z = 0
         for row in range(rows_count):
             for fea in self.features:
                 out_data.loc[row, fea.name] = fea.get_metric(inp_data.loc[row])
                 out_data.loc[row, 'id_post'] = inp_data.loc[row, 'id_post']
-                id_u = inp_data.loc[row, 'id_user']
-                if not math.isnan(id_u):
-                    out_data.loc[row, 'id_user'] = int(round(id_u))
-                else:
-                    out_data.loc[row, 'id_user'] = -1
+
+            id_u = inp_data.loc[row, 'id_user']
+            if not math.isnan(id_u):
+                out_data.loc[row, 'id_user'] = int(round(id_u))
+            else:
+                out_data.loc[row, 'id_user'] = -1
+            if z >= 500:
+                break
+            z += 1
+            bar.next()
+
+        bar.finish()
         return out_data
+
+
+if __name__ == "__main__":
+    dm = DataMiner()
+    data = dm.get_data(pd.read_csv(base_optimal_data))
+    data.to_csv('text.csv', index=False)
