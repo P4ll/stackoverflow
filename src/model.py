@@ -1,7 +1,10 @@
 import sys
 import pandas as pd
 import numpy as np
-import keras as K
+import keras
+from keras import layers, models
+import matplotlib
+import matplotlib.pyplot as plt
 
 sys.path.append('src')
 from data_miner import DataMiner
@@ -12,7 +15,7 @@ class Model:
         self._data_miner = DataMiner()
 
     def train(self, dataset: pd.DataFrame):
-        dataset = self._data_miner.get_data(dataset)
+        pass
 
     def test(self):
         pass
