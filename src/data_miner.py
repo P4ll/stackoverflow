@@ -64,5 +64,7 @@ class DataMiner:
 
 if __name__ == "__main__":
     dm = DataMiner()
-    data = dm.get_data(pd.read_csv(base_optimal_data))
-    data.to_csv('text.csv', index=False)
+    # data = dm.get_data(pd.read_csv(base_optimal_data))
+    # data.to_csv('text.csv', index=False)
+    data = dm.get_data(pd.read_csv('dataset/optimal_data2.csv'))
+    data.to_csv('text2.csv', index=False)

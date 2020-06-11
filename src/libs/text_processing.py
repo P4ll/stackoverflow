@@ -146,7 +146,11 @@ class TextProcessor():
         self._nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
         np.random.seed(2020)
 
-    def title_body_sim(self, text1: str, text2: str, n_topics: int = -1) -> float:
+    def title_body_sim(self, text1: str, text2: str, tags=None, n_topics: int = -1) -> float:
+        if tags != None:
+            text1 = add_string(text1, tags)
+            text2 = add_string(text2, tags)
+
         bow1 = get_text_bow(text1, self._dictionary, self._bigram_mod, self._trigram_mod, self._nlp)
         bow2 = get_text_bow(text2, self._dictionary, self._bigram_mod, self._trigram_mod, self._nlp)
 
@@ -164,3 +168,15 @@ class TextProcessor():
         if (math.isnan(jsd)):
             jsd = 0.0
         return jsd
+
+    def get_lda(self, text: str, n_topics: int = -1) -> np.array:
+        bow = get_text_bow(text, self._dictionary, self._bigram_mod, self._trigram_mod, self._nlp)
+
+        if n_topics == -1:
+            n_topics = self._lda_model.num_topics
+
+        p = np.zeros(n_topics)
+        for index, score in sorted(self._lda_model[bow], key=lambda tup: -1*tup[1]):
+            p[index] = score
+        return p
+
