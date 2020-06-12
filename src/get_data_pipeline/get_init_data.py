@@ -51,15 +51,26 @@ def get_post_is_closed(df: pd.DataFrame) -> pd.DataFrame:
 def get_post_type(df: pd.DataFrame) -> pd.DataFrame:
     arr = np.zeros(len(df.index), dtype=np.int8)
     bar = MyBar('Post typing', max=len(df.index))
+    good_count = 0
+    bad_count = 0
+    neu_count = 0
     for i in range(len(df.index)):
         bar.next()
         sc = int(df.loc[i, 'post_score'])
         ans_count = int(df.loc[i, 'post_ans_count'])
         is_closed = int(df.loc[i, 'post_is_closed'])
-        if (sc > 0 or ans_count > 0 and sc == 0 and not is_closed):
+        if sc > 0:
             arr[i] = 1
+            good_count += 1
+        elif sc < 0 or is_closed:
+            arr[i] = 0
+            bad_count += 1
+        else:
+            arr[i] = 2
+            neu_count += 1
     df['type'] = arr
     bar.finish()
+    print('good: {}, bad: {}, neutral: {}'.format(good_count, bad_count, neu_count))
     return df
 
 def get_all_data(init_data: pd.DataFrame=None) -> pd.DataFrame:
