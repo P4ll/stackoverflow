@@ -6,7 +6,7 @@ import math
 sys.path.append('src')
 sys.path.append('src/features')
 
-from feature import Feature
+from feature import IFeature
 from features.miss_teg import MissTegFeature
 from features.ans_count import AnsCount
 from features.questions_count import QuestionsCount
