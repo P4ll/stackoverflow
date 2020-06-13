@@ -19,7 +19,7 @@ from libs.my_paths import base_file_name, base_final_file, base_user_info_file, 
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 
-def save_add_user_info(df: pd.DataFrame) -> None:
+def save_add_user_info(df: pd.DataFrame) -> pd.DataFrame:
     out_df = pd.DataFrame(columns=['id_user', 'user_questions_count', 'user_ans_count', 'user_reached_people'])
 
     i = 0
@@ -74,6 +74,7 @@ def save_add_user_info(df: pd.DataFrame) -> None:
 
     out_df.to_csv(base_user_info_file, index=False)
     bar.finish()
+    return out_df
 
 if __name__ == "__main__":
     df = save_add_user_info(pd.read_csv(base_users_id_file))

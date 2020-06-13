@@ -14,9 +14,22 @@ import math
 sys.path.append('src')
 from libs.my_progress_bar import MyBar
 import libs.my_paths as mp
+from datetime import date, timedelta
 
-def get_init_data() -> pd.DataFrame:
-    post_q = """SELECT
+
+def get_init_data(begin_time: date = None, end_time: date = None) -> pd.DataFrame:
+    where_str = "WHERE EXTRACT(YEAR FROM creation_date) = 2019 AND EXTRACT(MONTH FROM creation_date) = 10"
+
+    if begin_time != None and end_time != None:
+        where_str = f"""WHERE (EXTRACT(YEAR FROM creation_date) BETWEEN {begin_time.year} AND {end_time.year}) AND 
+        (EXTRACT(MONTH FROM creation_date) BETWEEN {begin_time.month} AND {end_time.month}) AND 
+        (EXTRACT(DAY FROM creation_date) BETWEEN {begin_time.day} AND {end_time.day})"""
+    elif begin_time != None:
+        where_str = f"""WHERE (EXTRACT(YEAR FROM creation_date) = {begin_time.year}) AND 
+        (EXTRACT(MONTH FROM creation_date) = {begin_time.month}) AND 
+        (EXTRACT(DAY FROM creation_date) = {begin_time.day}"""
+
+    post_q = f"""SELECT
         id AS id_post,
         owner_user_id AS id_user,
         score AS post_score,
@@ -29,7 +42,7 @@ def get_init_data() -> pd.DataFrame:
         (SELECT reputation FROM `bigquery-public-data.stackoverflow.users` WHERE id = owner_user_id) AS user_rating,
         (SELECT creation_date FROM `bigquery-public-data.stackoverflow.users` WHERE id = owner_user_id) AS user_reg_date
     FROM   `bigquery-public-data.stackoverflow.posts_questions`
-    WHERE EXTRACT(YEAR FROM creation_date) = 2019 AND EXTRACT(MONTH FROM creation_date) = 10
+    {where_str}
     """
     resp = stackOverflow.query_to_pandas(post_q)
     return resp
@@ -73,7 +86,10 @@ def get_post_type(df: pd.DataFrame) -> pd.DataFrame:
     print('good: {}, bad: {}, neutral: {}'.format(good_count, bad_count, neu_count))
     return df
 
-def get_all_data(init_data: pd.DataFrame=None) -> pd.DataFrame:
+def get_all_data(init_data: pd.DataFrame=None, begin_time: date=None, end_time: date=None) -> pd.DataFrame:
+    if (begin_time != None and end_time != None or begin_time != None) and (end_time - begin_time < timedelta()):
+        raise Exception("End time - begin time < 0")
+
     tmp_file = mp.base_file_name
     df = pd.DataFrame()
 
