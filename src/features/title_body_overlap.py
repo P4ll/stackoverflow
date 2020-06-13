@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from feature import Feature
+from feature import IFeature
 import sys
 sys.path.append('src')
 
@@ -8,7 +8,7 @@ from libs.my_paths import base_model
 from libs.text_processing import TextProcessor
 
 
-class TitleBodyOverlap(Feature):
+class TitleBodyOverlap(IFeature):
     def __init__(self):
         self.name = "title_overlap"
         self._text_proc = TextProcessor()

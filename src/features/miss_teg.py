@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
-from feature import Feature
+from feature import IFeature
 
 
-class MissTegFeature(Feature):
+class MissTegFeature(IFeature):
     def __init__(self):
         self.name = "miss_teg"
 

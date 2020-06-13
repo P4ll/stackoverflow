@@ -1,7 +1,7 @@
 import pandas as pd
 from abc import ABC, abstractmethod, abstractproperty, ABCMeta
 
-class Feature():
+class IFeature():
     __metaclass__=ABCMeta
 
     @abstractproperty

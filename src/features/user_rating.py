@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
-from feature import Feature
+from feature import IFeature
 
 
-class UserRating(Feature):
+class UserRating(IFeature):
     def __init__(self):
         self.name = "user_rating"
 

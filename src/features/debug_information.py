@@ -2,9 +2,10 @@ import pandas as pd
 import re
 import numpy as np
 import scipy.stats as stats
+from feature import IFeature
 
 
-class UnnecessaryInformation:
+class UnnecessaryInformation(IFeature):
     def __init__(self):
         self.name = "debug_inf"
 
