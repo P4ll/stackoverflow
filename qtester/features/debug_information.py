@@ -2,7 +2,7 @@ import pandas as pd
 import re
 import numpy as np
 import scipy.stats as stats
-from feature import IFeature
+from qtester.feature import IFeature
 
 
 class UnnecessaryInformation(IFeature):

@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from feature import IFeature
+from qtester.feature import IFeature
 
 
 class ReachedPeople(IFeature):

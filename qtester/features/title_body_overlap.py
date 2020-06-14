@@ -1,11 +1,9 @@
 import pandas as pd
 import numpy as np
-from feature import IFeature
-import sys
-sys.path.append('qtester')
 
-from libs.my_paths import base_model
-from libs.text_processing import TextProcessor
+from qtester.feature import IFeature
+from qtester.libs.my_paths import base_model
+from qtester.libs.text_processing import TextProcessor
 
 
 class TitleBodyOverlap(IFeature):
@@ -18,4 +16,3 @@ class TitleBodyOverlap(IFeature):
 
     def name(self):
         return self.name
-
