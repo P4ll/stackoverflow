@@ -2,7 +2,7 @@ from text_matcher import matcher
 import pandas as pd
 import re
 import sys
-sys.path.append('src')
+sys.path.append('qtester')
 
 from libs.my_progress_bar import MyBar
 

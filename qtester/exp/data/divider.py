@@ -7,7 +7,7 @@ from lxml import html, etree
 import os
 import sys
 import math
-sys.path.append('src')
+sys.path.append('qtester')
 from libs.my_progress_bar import MyBar
 import libs.my_paths as mp
 

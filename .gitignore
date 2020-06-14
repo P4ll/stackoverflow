@@ -10,7 +10,7 @@ __pycache__/
 *.csv
 
 # bq-helper
-src/bq-helper/*
+qtester/bq-helper/*
 
 # Distribution / packaging
 .Python

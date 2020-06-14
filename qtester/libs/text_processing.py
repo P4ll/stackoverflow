@@ -8,7 +8,7 @@ import spacy
 import math
 import warnings
 import sys
-sys.path.append('src')
+sys.path.append('qtester')
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 import gensim.corpora as corpora

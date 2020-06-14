@@ -4,7 +4,7 @@ import pandas as pd
 import math
 import sys
 import json
-sys.path.append('src')
+sys.path.append('qtester')
 
 from libs.my_progress_bar import MyBar
 

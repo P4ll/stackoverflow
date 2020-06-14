@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import math
 
-sys.path.append('src')
+sys.path.append('qtester')
 
 from libs.my_paths import base_final_file, base_optimal_data
 from libs.my_progress_bar import MyBar

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import sys
 
-sys.path.append('src')
+sys.path.append('qtester')
 
 from libs.my_progress_bar import MyBar
 from libs.my_paths import *

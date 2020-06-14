@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import math
 import sys
-sys.path.append('src/libs')
+sys.path.append('qtester/libs')
 
 from my_paths import base_file_name, base_final_file, base_user_info_file, base_users_id_file
 from my_progress_bar import MyBar

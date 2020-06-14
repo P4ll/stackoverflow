@@ -20,7 +20,7 @@ stemmer = SnowballStemmer('english')
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 import sys
-sys.path.append('src')
+sys.path.append('qtester')
 
 from libs.my_progress_bar import MyBar
 from libs.my_paths import base_data

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from feature import IFeature
 import sys
-sys.path.append('src')
+sys.path.append('qtester')
 
 from libs.my_paths import base_model
 from libs.text_processing import TextProcessor
