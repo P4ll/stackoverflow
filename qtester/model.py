@@ -17,6 +17,7 @@ from sklearn.linear_model import LogisticRegression
 import xgboost as xgb
 
 from qtester.libs.data_preprocessing import *
+from qtester.libs.model_tester import *
 
 
 class IClassModel():
@@ -31,7 +32,7 @@ class IClassModel():
         """Train model"""
 
     @abstractmethod
-    def predict(self, *args, **kwargs):
+    def predict(self, *args, **kwargs) -> List:
         """Predict"""
 
     @abstractmethod
@@ -41,6 +42,9 @@ class IClassModel():
     @abstractmethod
     def load(self, *args, **kwargs):
         """Load model data"""
+
+    def validate(self, *args, **kwargs) -> Dict:
+        """Validate model"""
 
 
 class NNModel(IClassModel):
@@ -105,6 +109,9 @@ class NNModel(IClassModel):
     def load(self, path):
         self.model = keras.models.load_model(path)
 
+    def validate(self, y_test, res) -> Dict:
+        return res_eval(y_test, res)
+
 
 class XGBModel(IClassModel):
     def __init__(self):
@@ -135,3 +142,6 @@ class XGBModel(IClassModel):
 
     def load(self, path):
         xgb.XGBRFClassifier.load_model(self.model, path)
+
+    def validate(self, y_test, res) -> Dict:
+        return res_eval(y_test, res)
