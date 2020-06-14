@@ -19,16 +19,22 @@ from libs.my_paths import base_optimal_data
 from libs.my_progress_bar import MyBar
 
 class DataMiner:
-    def __init__(self):
+    def __init__(self, fea_list: IFeature = None, has_goal: bool = True):
         self.features = list()
 
-        self.features.append(AnsCount())
-        self.features.append(QuestionsCount())
-        self.features.append(ReachedPeople())
-        self.features.append(UserRating())
-        self.features.append(UnnecessaryInformation())
-        self.features.append(TitleBodyOverlap())
-        self.features.append(PostType())
+        if (fea_list != None):
+            for fea in fea_list:
+                self.features.append(fea)
+        else:
+            self.features.append(AnsCount())
+            self.features.append(QuestionsCount())
+            self.features.append(ReachedPeople())
+            self.features.append(UserRating())
+            self.features.append(UnnecessaryInformation())
+            self.features.append(TitleBodyOverlap())
+
+            if not has_goal:
+                self.features.append(PostType())
 
     def get_data(self, inp_data: pd.DataFrame, test_mod: bool=False) -> pd.DataFrame:
         rows_count = len(inp_data.index)
