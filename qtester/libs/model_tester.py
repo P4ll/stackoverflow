@@ -1,4 +1,4 @@
-from sklearn.metrics import average_precision_score, mean_squared_error, roc_curve, auc, accuracy_score, classification_report, confusion_matrix, f1_score
+from sklearn.metrics import average_precision_score, mean_squared_error, roc_curve, auc, accuracy_score, classification_report, confusion_matrix, f1_score, plot_confusion_matrix
 
 
 def res_eval(goal, res, pos_labels=2):

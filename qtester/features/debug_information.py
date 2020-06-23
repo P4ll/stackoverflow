@@ -2,12 +2,13 @@ import pandas as pd
 import re
 import numpy as np
 import scipy.stats as stats
-from qtester.feature import IFeature
+from feature import IFeature
 
 
 class UnnecessaryInformation(IFeature):
     def __init__(self):
         self.name = "debug_inf"
+        self.mode = super().work_mode
 
     def train(self, data: pd.DataFrame) -> None:
         len_of_each = []
@@ -40,3 +41,6 @@ class UnnecessaryInformation(IFeature):
 
     def name(self):
         return self.name
+
+    def mode(self):
+        return self.mode

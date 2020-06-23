@@ -2,9 +2,7 @@ import pandas as pd
 import numpy as np
 import sys
 import math
-
 sys.path.append('qtester')
-
 from feature import IFeature
 from features.miss_teg import MissTegFeature
 from features.ans_count import AnsCount
@@ -13,8 +11,8 @@ from features.reached_people import ReachedPeople
 from features.user_rating import UserRating
 from features.debug_information import UnnecessaryInformation
 from features.title_body_overlap import TitleBodyOverlap
+from features.lda_distr import LdaDistr
 from features.post_type import PostType
-
 from libs.my_paths import base_optimal_data
 from libs.my_progress_bar import MyBar
 
@@ -32,8 +30,9 @@ class DataMiner:
             self.features.append(UserRating())
             self.features.append(UnnecessaryInformation())
             self.features.append(TitleBodyOverlap())
+            self.features.append(LdaDistr())
 
-            if not has_goal:
+            if has_goal:
                 self.features.append(PostType())
 
     def get_data(self, inp_data: pd.DataFrame, test_mod: bool=False) -> pd.DataFrame:
@@ -53,7 +52,12 @@ class DataMiner:
 
         for row in range(rows_count):
             for fea in self.features:
-                out_data.loc[row, fea.name] = fea.get_metric(inp_data.loc[row])
+                if fea.mode == "scalar":
+                    out_data.loc[row, fea.name] = fea.get_metric(inp_data.loc[row])
+                else:
+                    out_vector = fea.get_metric(inp_data.loc[row])
+                    for v in out_vector:
+                        out_data.loc[row, v[0]] = v[1]
                 out_data.loc[row, 'id_post'] = inp_data.loc[row, 'id_post']
 
             id_u = inp_data.loc[row, 'id_user']
@@ -71,5 +75,5 @@ if __name__ == "__main__":
     dm = DataMiner()
     # data = dm.get_data(pd.read_csv(base_optimal_data))
     # data.to_csv('text.csv', index=False)
-    data = dm.get_data(pd.read_csv('dataset/optimal_data2.csv'))
-    data.to_csv('text2.csv', index=False)
+    data = dm.get_data(pd.read_csv('dataset/optimal_data2.csv'), True)
+    data.to_csv('ttt.csv', index=False)
